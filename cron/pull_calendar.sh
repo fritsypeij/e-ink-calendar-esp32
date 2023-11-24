@@ -25,7 +25,7 @@ if [ "$curr" != "$prev" ]
 then
 	# if changes have been detected - update the screen
 	python3 render_ical.py "$ICAL_SAVE"
-	convert calplot.png calplot.pbm
+	convert calplot.png -crop 1304x984+124+42 calplot.pbm
 
 fi
 
