@@ -24,7 +24,9 @@ prev=`cat $ICAL_VERSION.bak`
 if [ "$curr" != "$prev" ]
 then
 	# if changes have been detected - update the screen
-	cat "$ICAL_VERSION"
+	python3 render_ical.py "$ICAL_SAVE"
+	convert calplot.png calplot.pbm
+
 fi
 
 # cleanup
