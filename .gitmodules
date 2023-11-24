@@ -1,0 +1,3 @@
+[submodule "ical2img/mplcal"]
+	path = ical2img/mplcal
+	url = https://github.com/antnks/mplcal
