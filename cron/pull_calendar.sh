@@ -21,12 +21,14 @@ md5sum "$ICAL_SAVE" | cut -d ' ' -f 1 > "$ICAL_VERSION"
 curr=`cat $ICAL_VERSION`
 prev=`cat $ICAL_VERSION.bak`
 
-if [ "$curr" != "$prev" ]
+if [ "$curr" != "$prev" ] || [ "$1" == "force" ]
 then
 	# if changes have been detected - update the screen
 	python3 ../ical2img/render_ical.py "$ICAL_SAVE"
 	convert calplot.png -crop 1304x984+124+42 calplot.pbm
-
+	chunk=$((1304*984/8/2))
+	tail -n +3 calplot.pbm | dd bs=1 count=$chunk > calplot.0
+	tail -n +3 calplot.pbm | dd bs=1 count=$chunk skip=$chunk > calplot.1
 fi
 
 # cleanup
