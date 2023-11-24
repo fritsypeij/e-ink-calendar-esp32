@@ -3,6 +3,8 @@
 #ICAL_SAVE="/path/to/store/ical.txt"
 #ICAL_SECRET_URL="https://calendar.google.com/calendar/ical/xxx%40group.calendar.google.com/private-xxx/basic.ics"
 #ICAL_VERSION="/path/to/store/ical-version-hash.txt"
+#EID_IP="192.168.1.1"
+#EID_PORT="80"
 
 # save previous pull files
 mv "$ICAL_SAVE"    "$ICAL_SAVE.bak"    2>/dev/null
@@ -29,6 +31,8 @@ then
 	chunk=$((1304*984/8/2))
 	tail -n +3 calplot.pbm | dd bs=1 count=$chunk > calplot.0
 	tail -n +3 calplot.pbm | dd bs=1 count=$chunk skip=$chunk > calplot.1
+	cat header0 calplot.0 | nc $EID_IP $EID_PORT
+	cat header1 calplot.1 | nc $EID_IP $EID_PORT
 fi
 
 # cleanup
