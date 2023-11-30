@@ -1,6 +1,4 @@
 import sys
-sys.path.insert(0, './mplcal')
-
 from mplcal import MplCalendar
 
 print("Reading", sys.argv[1])
