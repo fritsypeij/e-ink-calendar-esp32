@@ -25,7 +25,7 @@ md5sum "$ICAL_SAVE" | cut -d ' ' -f 1 > "$ICAL_VERSION"
 
 # compare checksums
 curr=`cat $ICAL_VERSION`
-prev=`cat $ICAL_VERSION.bak`
+prev=`cat $ICAL_VERSION.bak 2> /dev/null`
 
 if [ "$curr" != "$prev" ] || [ "$1" == "force" ]
 then
