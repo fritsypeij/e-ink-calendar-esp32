@@ -1,2 +1,2 @@
-pip3 install icalendar
-cp ../ical2img/mplcal `python -m site --user-site` -r
+pip3 install icalendar matplotlib
+cp mplcal/mplcal.py `python -m site --user-site`
