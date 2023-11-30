@@ -69,5 +69,5 @@ for day in month:
 		calplot.add_event(recover_day, summary)
 
 calplot.color_day(current_day, 'mistyrose')
-calplot.save("calplot.png", 15, 11.32, 100)
+calplot.save(sys.argv[2], 15, 11.32, 100)
 
