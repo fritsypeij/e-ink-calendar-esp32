@@ -13,7 +13,7 @@ def append_event(idx, dt, ev):
 	month[idx].append([dt, ev])
 
 
-mytz = pytz.UTC
+mytz = pytz.timezone("Europe/Vilnius")
 
 input_file = open(sys.argv[1], "r")
 ical_events = Calendar().from_ical(input_file.read())
@@ -43,7 +43,6 @@ for event in ical_events.walk():
 	event_date = datetime.combine(cal_date, datetime.min.time())
 	if event_date.tzinfo == None:
 		event_date = mytz.localize(event_date)
-
 	if event_date > start_date and event_date < end_date:
 		dayindex = int(event_date.strftime('%Y%m%d'))
 		summary = str(event.get('summary'))
@@ -54,7 +53,8 @@ for event in ical_events.walk():
 			for i in range(0, delta.days):
 				append_event(dayindex + i, None, summary)
 		else:
-			append_event(dayindex, cal_date.strftime('%H%M'), summary)
+			localtime = cal_date.astimezone(mytz).strftime("%H%M")
+			append_event(dayindex, localtime, summary)
 
 calplot = MplCalendar(current_year, current_month)
 for day in month:
