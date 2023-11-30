@@ -35,8 +35,8 @@ then
 	chunk=$((1304*984/8/2))
 	tail -n +3 calplot.pbm | dd bs=1 count=$chunk skip=0      > calplot.0 2> /dev/null
 	tail -n +3 calplot.pbm | dd bs=1 count=$chunk skip=$chunk > calplot.1 2> /dev/null
-	cat <(echo -n $HEADER0) calplot.0 | nc $EID_IP $EID_PORT
-	cat <(echo -n $HEADER1) calplot.1 | nc $EID_IP $EID_PORT
+	cat <(echo -n $HEADER0) calplot.0 | nc -w 5 $EID_IP $EID_PORT
+	cat <(echo -n $HEADER1) calplot.1 | nc -w 5 $EID_IP $EID_PORT
 fi
 
 # cleanup
