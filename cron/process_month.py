@@ -1,10 +1,10 @@
+from mplcal import MplCalendar
 import icalendar
 from icalendar import Calendar
 from datetime import datetime, timezone
 from dateutil.relativedelta import relativedelta
 import pytz
 import sys
-import json
 
 def append_event(idx, dt, ev):
 	global month
@@ -12,13 +12,20 @@ def append_event(idx, dt, ev):
 		month[idx] = list()
 	month[idx].append([dt, ev])
 
+
 mytz = pytz.UTC
 
 input_file = open(sys.argv[1], "r")
 ical_events = Calendar().from_ical(input_file.read())
 
+# today
+today = datetime.today()
+current_day   = today.day
+current_month = today.month
+current_year  = today.year
+
 # get the first day of the current month
-start_date = datetime.today().replace(day=1, hour=0, minute=0, second=0, microsecond=0)
+start_date = today.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
 
 # include one week of the previous and the next months
 end_date   = start_date + relativedelta(weeks=1) + relativedelta(months=1)
@@ -49,7 +56,18 @@ for event in ical_events.walk():
 		else:
 			append_event(dayindex, cal_date.strftime('%H%M'), summary)
 
+calplot = MplCalendar(current_year, current_month)
 for day in month:
-	print(day, month[day])
+	for event in month[day]:
+		summary = event[1]
+		recover_day = int(str(day)[-2:])
+		recover_month = int(str(day)[-4:-2])
+		if recover_month != current_month:
+			continue
+		if event[0]:
+			summary = event[0] + " " + summary
+		calplot.add_event(recover_day, summary)
 
-print(json.dumps(month))
+calplot.color_day(current_day, 'mistyrose')
+calplot.save("calplot.png", 15, 11.32, 100)
+
