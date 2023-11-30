@@ -4,6 +4,7 @@ from datetime import datetime, timezone
 from dateutil.relativedelta import relativedelta
 import pytz
 import sys
+import json
 
 def append_event(idx, dt, ev):
 	global month
@@ -38,15 +39,17 @@ for event in ical_events.walk():
 
 	if event_date > start_date and event_date < end_date:
 		dayindex = int(event_date.strftime('%Y%m%d'))
+		summary = str(event.get('summary'))
 
 		# check for full day event
-		delta = event.get('dtend').dt - event.get('dtstart').dt
+		delta = event.get('dtend').dt - cal_date
 		if delta.days >= 1:
 			for i in range(0, delta.days):
-				append_event(dayindex + i, None, event.get('summary'))
+				append_event(dayindex + i, None, summary)
 		else:
-			append_event(dayindex, event_date, event.get('summary'))
+			append_event(dayindex, cal_date.strftime('%H%M'), summary)
 
 for day in month:
 	print(day, month[day])
 
+print(json.dumps(month))
