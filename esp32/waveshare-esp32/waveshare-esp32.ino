@@ -5,6 +5,7 @@
  
 #include "DEV_Config.h"
 #include "utility/EPD_12in48b.h"
+#include "GUI_Paint.h"
 #include <WiFi.h>
 
 // hack for "Brownout detector was triggered"
@@ -22,16 +23,26 @@
 WiFiServer server(80);
 int Version = 1; // needed for EPD
 
-void boot()
+void blink_led()
 {
-  for(int i=0;i<3;i++)
-  {
     delay(1000);
     digitalWrite(ONBOARD_LED,HIGH);
     delay(100);
     digitalWrite(ONBOARD_LED,LOW);
-  }
-  
+}
+
+void show_ip(char *ip)
+{
+    unsigned char *buf;
+    int expectedImageSize = EIDW * (EIDH / 2) / 8;
+    buf = (unsigned char *)malloc(expectedImageSize);
+
+    Paint_NewImage(buf, EIDW, (EIDH / 2), 0, WHITE);
+    Paint_Clear(WHITE);
+    Paint_DrawString_EN(350, 70, ip, &Font24, WHITE, BLACK);
+    EPD_12in48B_SendBlack1(buf);
+    EPD_12in48B_TurnOnDisplay();
+    free(buf);
 }
 
 void paint(unsigned char *buf, int side)
@@ -61,7 +72,8 @@ void clearscreen()
 
 void setup()
 {
-  boot();
+  for(int i=0;i<3;i++)
+    blink_led();
   
   printf("Init \r\n");
   DEV_Delay_ms(500);
@@ -80,14 +92,18 @@ void setup()
   {
     delay(500);
     Serial.print(".");
+    blink_led();
   }
 
   Serial.println("IP address: ");
   Serial.println(WiFi.localIP());
   server.begin();
-  
+
   printf("Clear \r\n");
   EPD_12in48B_Clear();
+
+  show_ip((char*)WiFi.localIP().toString().c_str());
+  Serial.println("Setup done");
 }
 
 
