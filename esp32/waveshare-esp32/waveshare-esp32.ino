@@ -44,24 +44,51 @@ void show_ip(char *ip)
     EPD_12in48B_TurnOnDisplay();
     free(buf);
 }
-
+/*
+0 - black1
+1 - black2
+2 - red1
+3 - red2
+9 - clear
+ */
 void paint(unsigned char *buf, int side)
 {
   printf("NewImage \r\n");
   
-  if(side)
-    EPD_12in48B_SendBlack2(buf);
-  else
-    EPD_12in48B_SendBlack1(buf);
+  switch(side)
+  {
+    case 0:
+      EPD_12in48B_SendBlack1(buf);
+      break;
+    case 1:
+      EPD_12in48B_SendBlack2(buf);
+      EPD_12in48B_TurnOnDisplay();
+      break;
+    case 2:
+      EPD_12in48B_SendRed1(buf);
+      break;
+    case 3:
+      EPD_12in48B_SendRed2(buf);
+      EPD_12in48B_TurnOnDisplay();
+      break;
+    case 9:
+      clearscreen();
+      break;
+    default:
+      printf("Unknown side \r\n");
+      return;
+  }
   
-  EPD_12in48B_TurnOnDisplay();
 }
 
 bool isValidPacket(unsigned char *p)
 {
-  if (p[0] == 'E' && p[1] == 'I' && p[2] == 'D')
-    return true;
-  return false;
+  return (p[0] == 'E' && p[1] == 'I' && p[2] == 'D');
+}
+
+bool isClear(unsigned char *p)
+{
+  return (p[0] == 'E' && p[1] == 'I' && p[2] == 'D' && p[3] == '9');
 }
 
 void clearscreen()
@@ -159,12 +186,14 @@ void loop()
     }
     Serial.println("Disonnected at:");
     Serial.println(count);
-    if (count >= expectedPacketSize && isValidPacket(header))
+    if (count >= expectedPacketSize && isValidPacket(header) || isClear(header))
     {
       int side = (header[3] - '0');
       Serial.println("Paint image");
       paint((unsigned char*)buf, side);
     }
+    else
+      Serial.println("Received junk");
     
     free(buf);
     buf = NULL;
