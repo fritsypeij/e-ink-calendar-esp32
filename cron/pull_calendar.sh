@@ -28,7 +28,7 @@ convert "$PNG_SAVE" -crop 1304x984+124+42 "$PNG_CROP"
 convert "$PNG_CROP" -negate "$PBM_B_TEMP"
 
 # save only mistyrose color
-convert "$PNG_CROP" -fill white +opaque mistyrose "$PBM_R_TEMP.png"
+convert "$PNG_CROP" -fill white +opaque red "$PBM_R_TEMP.png"
 convert "$PBM_R_TEMP.png" -negate "$PBM_R_TEMP"
 
 # clear display
@@ -36,8 +36,8 @@ cat <(echo -n $CLEAR) | nc -w 1 $EID_IP $EID_PORT
 sleep 30
 
 chunk=$((1304*984/8/2))
-cat <(echo -n $BCK_UP) <(tail -n +3 "$PBM_B_TEMP" | dd bs=1 count=$chunk skip=0 2>/dev/null)      | nc -w 10 $EID_IP $EID_PORT
-cat <(echo -n $BCK_DN) <(tail -n +3 "$PBM_B_TEMP" | dd bs=1 count=$chunk skip=$chunk 2>/dev/null) | nc -w 10 $EID_IP $EID_PORT
-cat <(echo -n $RED_UP) <(tail -n +3 "$PBM_R_TEMP" | dd bs=1 count=$chunk skip=0 2>/dev/null)      | nc -w 10 $EID_IP $EID_PORT
-cat <(echo -n $RED_DN) <(tail -n +3 "$PBM_R_TEMP" | dd bs=1 count=$chunk skip=$chunk 2>/dev/null) | nc -w 10 $EID_IP $EID_PORT
+cat <(echo -n $BCK_UP) <(tail -n +4 "$PBM_B_TEMP" | dd bs=1 count=$chunk skip=0 2>/dev/null)      | nc -w 10 $EID_IP $EID_PORT
+cat <(echo -n $BCK_DN) <(tail -n +4 "$PBM_B_TEMP" | dd bs=1 count=$chunk skip=$chunk 2>/dev/null) | nc -w 10 $EID_IP $EID_PORT
+cat <(echo -n $RED_UP) <(tail -n +4 "$PBM_R_TEMP" | dd bs=1 count=$chunk skip=0 2>/dev/null)      | nc -w 10 $EID_IP $EID_PORT
+cat <(echo -n $RED_DN) <(tail -n +4 "$PBM_R_TEMP" | dd bs=1 count=$chunk skip=$chunk 2>/dev/null) | nc -w 10 $EID_IP $EID_PORT
 
