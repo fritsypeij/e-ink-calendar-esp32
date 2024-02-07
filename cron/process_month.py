@@ -23,12 +23,13 @@ current_day   = today.day
 current_month = today.month
 current_year  = today.year
 
-# get the first day of the current month
-start_date = today.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
+# find the first day of the current week
+start_date = today - relativedelta(days=today.weekday())
+start_date = start_date.replace(hour=0, minute=0, second=0, microsecond=0)
+# add two weeks
+end_date   = start_date + relativedelta(weeks=2) - relativedelta(days=1)
+end_date   = end_date.replace(hour=23, minute=59, second=59, microsecond=0)
 
-# include one week of the previous and the next months
-end_date   = start_date + relativedelta(weeks=1) + relativedelta(months=1)
-start_date = start_date - relativedelta(weeks=1)
 start_date = mytz.localize(start_date)
 end_date   = mytz.localize(end_date)
 
@@ -40,6 +41,7 @@ for event in ical_events.walk():
 
 	cal_date = event.get('dtstart').dt
 	event_date = datetime.combine(cal_date, datetime.min.time())
+
 	if event_date.tzinfo == None:
 		event_date = mytz.localize(event_date)
 	if event_date > start_date and event_date < end_date:
@@ -67,6 +69,7 @@ for day in month:
 			summary = event[0] + " " + summary
 		print(recover_day, summary)
 
+print(month)
 # write html to sys.argv[2]
 
 
