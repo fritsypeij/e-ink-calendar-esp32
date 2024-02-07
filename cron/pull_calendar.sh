@@ -2,6 +2,7 @@
 
 #BASEDIR="/path/to/store"
 #ICAL_SAVE="$BASEDIR/ical.txt"
+#HTML_DOC="$BASEDIR/ical.html"
 #PNG_SAVE="$BASEDIR/ical-raw.png"
 #PNG_CROP="$BASEDIR/ical.png
 #PBM_B_TEMP="$BASEDIR/ical.b.pbm"
@@ -22,8 +23,9 @@ CLEAR="EID9"
 wget -q -O "$ICAL_SAVE" "$ICAL_SECRET_URL"
 
 # parse and save only requsted month and the next one
-python3 process_month.py "$ICAL_SAVE" "$PNG_SAVE"
-convert "$PNG_SAVE" -crop 1304x984+124+42 "$PNG_CROP"
+python3 process_month.py "$ICAL_SAVE" "$HTML_DOC"
+firefox --headless --screenshot "$PNG_SAVE" "file://$HTML_DOC"
+convert "$PNG_SAVE" -crop 1304x984+12+4 "$PNG_CROP"
 
 exit 0
 
