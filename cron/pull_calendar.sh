@@ -2,7 +2,7 @@
 
 #BASEDIR="/path/to/store"
 #ICAL_SAVE="$BASEDIR/ical.txt"
-#HTML_DOC="$BASEDIR/ical.html"
+#HTML_DOC="$BASEDIR/render.html"
 #PNG_SAVE="$BASEDIR/ical-raw.png"
 #PNG_CROP="$BASEDIR/ical.png
 #PBM_B_TEMP="$BASEDIR/ical.b.pbm"
