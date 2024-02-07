@@ -1,10 +1,11 @@
 #!/bin/bash
 
-#ICAL_SAVE="/path/to/store/ical.txt"
-#PNG_SAVE="/path/to/store/ical-raw.png"
-#PNG_CROP="/path/to/store/ical.png
-#PBM_B_TEMP="/path/to/store/ical.b.pbm"
-#PBM_R_TEMP="/path/to/store/ical.r.pbm"
+#BASEDIR="/path/to/store"
+#ICAL_SAVE="$BASEDIR/ical.txt"
+#PNG_SAVE="$BASEDIR/ical-raw.png"
+#PNG_CROP="$BASEDIR/ical.png
+#PBM_B_TEMP="$BASEDIR/ical.b.pbm"
+#PBM_R_TEMP="$BASEDIR/ical.r.pbm"
 #ICAL_SECRET_URL="https://calendar.google.com/calendar/ical/xxx%40group.calendar.google.com/private-xxx/basic.ics"
 #EID_IP="192.168.1.1"
 #EID_PORT="80"
@@ -23,6 +24,8 @@ wget -q -O "$ICAL_SAVE" "$ICAL_SECRET_URL"
 # parse and save only requsted month and the next one
 python3 process_month.py "$ICAL_SAVE" "$PNG_SAVE"
 convert "$PNG_SAVE" -crop 1304x984+124+42 "$PNG_CROP"
+
+exit 0
 
 # convert to black
 convert "$PNG_CROP" -negate "$PBM_B_TEMP"
