@@ -1,4 +1,3 @@
-from mplcal import MplCalendar
 import icalendar
 from icalendar import Calendar
 from datetime import datetime, timezone
@@ -56,7 +55,7 @@ for event in ical_events.walk():
 			localtime = cal_date.astimezone(mytz).strftime("%H%M")
 			append_event(dayindex, localtime, summary)
 
-calplot = MplCalendar(current_year, current_month)
+
 for day in month:
 	for event in month[day]:
 		summary = event[1]
@@ -66,8 +65,8 @@ for day in month:
 			continue
 		if event[0]:
 			summary = event[0] + " " + summary
-		calplot.add_event(recover_day, summary)
+		print(recover_day, summary)
 
-calplot.color_day(current_day, 'mistyrose')
-calplot.save(sys.argv[2], 15, 11.32, 100)
+# write html to sys.argv[2]
+
 
