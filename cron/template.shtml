@@ -1,0 +1,65 @@
+<table border="0" cellpadding="1" cellspacing="1" style="height:984px; width:1304px">
+<tbody>
+<tr>
+	<td>
+
+		<table border="0" cellpadding="1" cellspacing="1"
+			style="height: 100%;  width: 100%;">
+		<tbody>
+		<tr style="height: 50%;  width: 100%;">
+			<td>
+
+			<table border="0" cellpadding="1" cellspacing="1"
+				style="height: 100%;  width: 100%;">
+			<tbody>
+			<tr>
+				<td style="height: 100%; width: 30%; text-align: center;">
+
+					<span style="font-size: 250px">
+					${TODAY_DAY}
+					</span><br>
+					<span style="font-size: 90px;">
+					${TODAY_WEEKDAY}</span><br>
+					<span style="font-size: 60px;">
+					${TODAY_MONTH} ${TODAY_YEAR}</span>
+
+				</td>
+				<td style="height: 100%; width: 50%; text-align: center;">
+
+					<span style="font-size: 70px">
+					<strong>${TODAY_FULL_DAY_EVENTS}</strong>
+					${TODAY_EVENTS}
+					</span>
+
+				</td>
+			</tr>	
+			</tbody>
+			</table>
+
+			</td>
+		</tr>
+		<tr style="height: 50%; width: 100%;">
+			<td>
+			
+			<table border="1" cellpadding="1" cellspacing="1"
+				style="height: 100%; width: 100%; text-align: center;">
+			<tbody>
+			<tr style="height: 50%;">
+				${DAY_ROW1}
+			</tr>
+			<tr>
+				${DAY_ROW2}
+			</tr>
+			</tbody>
+			</table>
+			
+			</td>
+		</tr>
+		</tbody>
+		</table>
+
+	</td>
+</tr>
+</tbody>
+</table>
+
