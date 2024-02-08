@@ -57,33 +57,31 @@ for event in ical_events.walk():
 			localtime = cal_date.astimezone(mytz).strftime("%H%M")
 			append_event(dayindex, localtime, summary)
 
-
-for day in month:
-	for event in month[day]:
-		summary = event[1]
-		recover_day = int(str(day)[-2:])
-		recover_month = int(str(day)[-4:-2])
-		if recover_month != current_month:
-			continue
-		if event[0]:
-			summary = event[0] + " " + summary
-		print(recover_day, summary)
-
 print(month)
 
 # load template
 template_file = open("template.shtml", "r")
 template = template_file.read()
-template = template.replace("${TODAY_DAY}", str(current_day))
-template = template.replace("${TODAY_WEEKDAY}","AAA2")
-template = template.replace("${TODAY_MONTH}","AAA3")
-template = template.replace("${TODAY_YEAR}","AAA4")
+template = template.replace("${TODAY_DAY}",    today.strftime("%-d"))
+template = template.replace("${TODAY_WEEKDAY}",today.strftime("%A"))
+template = template.replace("${TODAY_MONTH}",  today.strftime("%B"))
+template = template.replace("${TODAY_YEAR}",   today.strftime("%Y"))
 
-# loop
-template = template.replace("${TODAY_FULL_DAY_EVENTS}", "aaaaaaaa<br>")
-template = template.replace("${TODAY_EVENTS}", "bbbbbbbb<br>")
+# process current day
+dic_idx = current_year*10000 + current_month*100 + current_day
+allday=""
+timeday=""
+if dic_idx in month:
+	for event in month[dic_idx]:
+		summary = event[1]
+		print(summary)
+		if event[0]:
+			timeday += event[0] + " " + summary + "<br>"
+		else:
+			allday += summary + "<br>"
+template = template.replace("${TODAY_FULL_DAY_EVENTS}", allday)
+template = template.replace("${TODAY_EVENTS}", timeday)
 
-# loop
 row = '''\
 <td style="width: 14%;">
 <span style="font-size: 50px; color: {color}; text-decoration-style: wavy; text-decoration-line: {decor};">
@@ -94,7 +92,7 @@ row = '''\
 </span>
 </td>'''
 
-
+# loop 14 days
 dayrow=""
 loop_day = start_date
 while loop_day <= end_date:
@@ -107,8 +105,19 @@ while loop_day <= end_date:
 	if loop_day.day == current_day:
 		decor="underline"
 
-	allday="UUUU<br>"
-	timeday="ddddd<br>"
+	dic_idx = loop_day.year*10000 + loop_day.month*100 + loop_day.day
+	allday=""
+	timeday=""
+	if dic_idx in month:
+		for event in month[dic_idx]:
+			summary = event[1]
+			print(summary)
+			if event[0]:
+				timeday += event[0] + " " + summary + "<br>"
+			else:
+				allday += summary + "<br>"
+	else:
+		allday += "&nbsp;"
 
 	if loop_day == start_date + relativedelta(weeks=1):
 		dayrow+="\n</tr>\n<tr>"
@@ -121,3 +130,4 @@ template = template.replace("${DAY_ROW}", dayrow)
 output_file = open(sys.argv[2], "w")
 output_file.write(template)
 output_file.close()
+
