@@ -94,24 +94,29 @@ row = '''\
 </span>
 </td>'''
 
-dayrow1=""
-dayrow2=""
-for i in range(1,8):
+
+dayrow=""
+loop_day = start_date
+while loop_day <= end_date:
 	color="black"
 	decor="none"
-	if i == 6 or i == 7:
+
+	# TODO also detect public holiday
+	if loop_day.weekday() >= 5:
 		color="red"
-	if i == current_day:
+	if loop_day.day == current_day:
 		decor="underline"
-	curday=i
+
 	allday="UUUU<br>"
 	timeday="ddddd<br>"
 
-	dayrow1+=row.format(color=color, decor=decor, allday=allday, timeday=timeday, curday=curday)+"\n"
-	dayrow2+=row.format(color=color, decor=decor, allday=allday, timeday=timeday, curday=curday)+"\n"
+	if loop_day == start_date + relativedelta(weeks=1):
+		dayrow+="\n</tr>\n<tr>"
+	dayrow+=row.format(color=color, decor=decor, allday=allday, timeday=timeday, curday=loop_day.day)+"\n"
 
-template = template.replace("${DAY_ROW1}", dayrow1)
-template = template.replace("${DAY_ROW2}", dayrow2)
+	loop_day += relativedelta(days=1)
+
+template = template.replace("${DAY_ROW}", dayrow)
 
 output_file = open(sys.argv[2], "w")
 output_file.write(template)

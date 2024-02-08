@@ -45,10 +45,7 @@
 				style="height: 100%; width: 100%; text-align: center;">
 			<tbody>
 			<tr style="height: 50%;">
-				${DAY_ROW1}
-			</tr>
-			<tr>
-				${DAY_ROW2}
+				${DAY_ROW}
 			</tr>
 			</tbody>
 			</table>
