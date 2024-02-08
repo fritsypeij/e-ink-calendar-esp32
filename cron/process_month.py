@@ -1,4 +1,5 @@
 import icalendar
+import recurring_ical_events
 from icalendar import Calendar
 from datetime import datetime, timezone
 from dateutil.relativedelta import relativedelta
@@ -33,8 +34,10 @@ end_date   = end_date.replace(hour=23, minute=59, second=59, microsecond=0)
 start_date = mytz.localize(start_date)
 end_date   = mytz.localize(end_date)
 
+events = recurring_ical_events.of(ical_events).between(start_date, end_date)
+
 month = dict()
-for event in ical_events.walk():
+for event in events:
 
 	if event.name != "VEVENT":
 		continue
