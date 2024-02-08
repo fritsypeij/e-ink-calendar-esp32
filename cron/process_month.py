@@ -4,6 +4,7 @@ from icalendar import Calendar
 from datetime import datetime, timezone
 from dateutil.relativedelta import relativedelta
 import pytz
+import locale
 import sys
 
 def append_event(idx, dt, ev):
@@ -15,7 +16,7 @@ def append_event(idx, dt, ev):
 def date_idx(d):
 	return d.year*10000 + d.month*100 + d.day
 
-
+locale.setlocale(locale.LC_TIME, "lt_LT.utf8")
 mytz = pytz.timezone("Europe/Vilnius")
 
 input_file = open(sys.argv[1], "r")
