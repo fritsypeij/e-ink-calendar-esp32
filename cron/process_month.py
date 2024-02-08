@@ -12,6 +12,9 @@ def append_event(idx, dt, ev):
 		month[idx] = list()
 	month[idx].append([dt, ev])
 
+def date_idx(d):
+	return d.year*10000 + d.month*100 + d.day
+
 
 mytz = pytz.timezone("Europe/Vilnius")
 
@@ -57,7 +60,7 @@ for event in events:
 			for i in range(0, delta.days):
 				append_event(dayindex + i, None, summary)
 		else:
-			localtime = cal_date.astimezone(mytz).strftime("%H%M")
+			localtime = cal_date.astimezone(mytz).strftime("%H:%M")
 			append_event(dayindex, localtime, summary)
 
 print(month)
@@ -71,7 +74,7 @@ template = template.replace("${TODAY_MONTH}",  today.strftime("%B"))
 template = template.replace("${TODAY_YEAR}",   today.strftime("%Y"))
 
 # process current day
-dic_idx = current_year*10000 + current_month*100 + current_day
+dic_idx = date_idx(today)
 allday=""
 timeday=""
 if dic_idx in month:
@@ -108,7 +111,7 @@ while loop_day <= end_date:
 	if loop_day.day == current_day:
 		decor="underline"
 
-	dic_idx = loop_day.year*10000 + loop_day.month*100 + loop_day.day
+	dic_idx = date_idx(loop_day)
 	allday=""
 	timeday=""
 	if dic_idx in month:
