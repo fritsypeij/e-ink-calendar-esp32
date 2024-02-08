@@ -83,11 +83,11 @@ template = template.replace("${TODAY_FULL_DAY_EVENTS}", allday)
 template = template.replace("${TODAY_EVENTS}", timeday)
 
 row = '''\
-<td style="width: 14%;">
+<td style="width: 14%; vertical-align: top">
 <span style="font-size: 50px; color: {color}; text-decoration-style: wavy; text-decoration-line: {decor};">
 <strong>{curday}</strong><br></span><br>
 <span style="font-size: 20px; color: {color};">
-<strong>{allday}<strong>
+<strong>{allday}</strong>
 {timeday}
 </span>
 </td>'''
