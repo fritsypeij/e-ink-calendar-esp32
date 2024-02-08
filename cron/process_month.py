@@ -90,7 +90,7 @@ template = template.replace("${TODAY_EVENTS}", timeday)
 
 row = '''\
 <td style="width: 14%; vertical-align: top">
-<span style="font-size: 50px; color: {color}; text-decoration-style: wavy; text-decoration-line: {decor};">
+<span style="font-size: 50px; color: {color}; text-decoration-style: wavy; {decor};">
 <strong>{curday}</strong><br></span><br>
 <span style="font-size: 20px; color: {color};">
 <strong>{allday}</strong>
@@ -109,7 +109,7 @@ while loop_day <= end_date:
 	if loop_day.weekday() >= 5:
 		color="red"
 	if loop_day.day == current_day:
-		decor="underline"
+		decor="display: inline-block; height: 70px; background: #bbbbbb"
 
 	dic_idx = date_idx(loop_day)
 	allday=""
