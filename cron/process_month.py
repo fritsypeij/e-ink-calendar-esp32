@@ -78,16 +78,24 @@ template = template.replace("${TODAY_YEAR}",   today.strftime("%Y"))
 dic_idx = date_idx(today)
 allday=""
 timeday=""
+color="black"
 if dic_idx in month:
 	for event in month[dic_idx]:
 		summary = event[1]
 		print(summary)
+		# convention, if an event starts with an asterisk - it is public holiday
+		if summary[0] == '*':
+			color="red"
+			summary=summary[2:]
 		if event[0]:
 			timeday += event[0] + " " + summary + "<br>"
 		else:
 			allday += summary + "<br>"
+else:
+	allday="☑"
 template = template.replace("${TODAY_FULL_DAY_EVENTS}", allday)
 template = template.replace("${TODAY_EVENTS}", timeday)
+emplate = template.replace("${COLOR}", color)
 
 row = '''\
 <td style="width: 14%; vertical-align: top">
@@ -119,6 +127,12 @@ while loop_day <= end_date:
 		for event in month[dic_idx]:
 			summary = event[1]
 			print(summary)
+
+			# convention, if an event starts with an asterisk - it is public holiday
+			if summary[0] == '*':
+				color="red"
+				summary=summary[2:]
+			# if event[0] is None - it is a full day event
 			if event[0]:
 				timeday += event[0] + " " + summary + "<br>"
 			else:

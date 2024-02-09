@@ -15,18 +15,18 @@
 			<tr>
 				<td style="height: 100%; width: 30%; text-align: center;">
 
-					<span style="font-size: 250px">
+					<span style="font-size: 250px; color: ${COLOR}">
 					${TODAY_DAY}
 					</span><br>
-					<span style="font-size: 90px;">
+					<span style="font-size: 90px; color: ${COLOR}">
 					${TODAY_WEEKDAY}</span><br>
-					<span style="font-size: 60px;">
+					<span style="font-size: 60px; color: ${COLOR}">
 					${TODAY_MONTH} ${TODAY_YEAR}</span>
 
 				</td>
 				<td style="height: 100%; width: 50%; text-align: center;">
 
-					<span style="font-size: 70px">
+					<span style="font-size: 70px; color: ${COLOR}">
 					<strong>${TODAY_FULL_DAY_EVENTS}</strong>
 					${TODAY_EVENTS}
 					</span>
