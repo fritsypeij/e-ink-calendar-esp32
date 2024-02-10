@@ -17,6 +17,7 @@ def date_idx(d):
 	return d.year*10000 + d.month*100 + d.day
 
 locale.setlocale(locale.LC_TIME, "lt_LT.utf8")
+#locale.setlocale(locale.LC_TIME, "ru_RU.UTF-8")
 mytz = pytz.timezone("Europe/Vilnius")
 
 input_file = open(sys.argv[1], "r")
@@ -64,7 +65,7 @@ for event in events:
 			localtime = cal_date.astimezone(mytz).strftime("%H:%M")
 			append_event(dayindex, localtime, summary)
 
-print(month)
+##print(month)
 
 # load template
 template_file = open("template.shtml", "r")
@@ -79,10 +80,13 @@ dic_idx = date_idx(today)
 allday=""
 timeday=""
 color="black"
+
+if today.weekday() >= 5:
+	color="red"
 if dic_idx in month:
 	for event in month[dic_idx]:
 		summary = event[1]
-		print(summary)
+		##print(summary)
 		# convention, if an event starts with an asterisk - it is public holiday
 		if summary[0] == '*':
 			color="red"
@@ -95,7 +99,7 @@ else:
 	allday="☑"
 template = template.replace("${TODAY_FULL_DAY_EVENTS}", allday)
 template = template.replace("${TODAY_EVENTS}", timeday)
-emplate = template.replace("${COLOR}", color)
+template = template.replace("${COLOR}", color)
 
 row = '''\
 <td style="width: 14%; vertical-align: top">
@@ -126,7 +130,7 @@ while loop_day <= end_date:
 	if dic_idx in month:
 		for event in month[dic_idx]:
 			summary = event[1]
-			print(summary)
+			##print(summary)
 
 			# convention, if an event starts with an asterisk - it is public holiday
 			if summary[0] == '*':

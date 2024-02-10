@@ -20,7 +20,7 @@
 					</span><br>
 					<span style="font-size: 90px; color: ${COLOR}">
 					${TODAY_WEEKDAY}</span><br>
-					<span style="font-size: 60px; color: ${COLOR}">
+					<span style="font-size: 60px; color: black">
 					${TODAY_MONTH} ${TODAY_YEAR}</span>
 
 				</td>

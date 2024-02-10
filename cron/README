@@ -1,2 +1,3 @@
+apt install firefox language-pack-lt
 pip3 install icalendar recurring_ical_events
 
