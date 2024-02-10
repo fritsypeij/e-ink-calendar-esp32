@@ -1,19 +1,26 @@
 #!/bin/bash
 
-#BASEDIR="/path/to/store"
-#ICAL_SAVE="$BASEDIR/ical.txt"
-#HTML_DOC="$BASEDIR/render.html"
-#PNG_SAVE="$BASEDIR/ical-raw.png"
-#PNG_CROP="$BASEDIR/ical.png
-#PBM_B_TEMP="$BASEDIR/ical.b.pbm"
-#PBM_R_TEMP="$BASEDIR/ical.r.pbm"
-#ICAL_SECRET_URL="https://calendar.google.com/calendar/ical/xxx%40group.calendar.google.com/private-xxx/basic.ics"
-#EID_IP="192.168.1.1"
-#EID_PORT="80"
-
+# get script's dir
 SCRIPT=`realpath $0`
 DIR=`dirname $SCRIPT`
 source $DIR/.env
+
+# if .env does not override, use the script's dir
+if [ -z "$BASEDIR"]
+then
+	BASEDIR=$DIR
+fi
+
+# file locations
+ICAL_SAVE="$BASEDIR/ical.txt"
+HTML_DOC="$BASEDIR/render.html"
+PNG_SAVE="$BASEDIR/ical-raw.png"
+PNG_CROP="$BASEDIR/ical.png"
+PBM_B_TEMP="$BASEDIR/ical.b.pbm"
+PBM_R_TEMP="$BASEDIR/ical.r.pbm"
+#ICAL_SECRET_URL="https://calendar.google.com/calendar/ical/xxx%40group.calendar.google.com/private-xxx/basic.ics"
+#EID_IP="192.168.1.1"
+#EID_PORT="80"
 
 # headers
 BCK_UP="EID0"
