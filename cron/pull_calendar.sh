@@ -31,25 +31,29 @@ CLEAR="EID9"
 
 # download calendar to a temp file
 wget -q -O "$ICAL_SAVE" "$ICAL_SECRET_URL"
+if [ ! -s "$ICAL_SAVE" ]
+then
+	echo "Unable to download the calendar"
+	exit 1
+fi
 
 # parse and save only requsted month and the next one
 python3 process_month.py "$ICAL_SAVE" "$HTML_DOC"
 
 # detect firefox
-firefox --version
+firefox --version > /dev/null
 if [ $? != 0 ]
 then
 	echo "Unable to run headless firefox"
-	exit 1
+	exit 2
 fi
 firefox --headless --screenshot "$PNG_SAVE" "file://$HTML_DOC" 1> /dev/null 2> /dev/null
 convert "$PNG_SAVE" -crop 1304x984+12+4 "$PNG_CROP"
 if [ $? != 0 ]
 then
 	echo "Unable to crop PNG"
-	exit 2
+	exit 3
 fi
-
 
 # convert to black
 convert "$PNG_CROP" -negate "$PBM_B_TEMP"
