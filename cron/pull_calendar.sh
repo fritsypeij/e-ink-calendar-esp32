@@ -34,8 +34,22 @@ wget -q -O "$ICAL_SAVE" "$ICAL_SECRET_URL"
 
 # parse and save only requsted month and the next one
 python3 process_month.py "$ICAL_SAVE" "$HTML_DOC"
+
+# detect firefox
+firefox --version
+if [ $? != 0 ]
+then
+	echo "Unable to run headless firefox"
+	exit 1
+fi
 firefox --headless --screenshot "$PNG_SAVE" "file://$HTML_DOC" 1> /dev/null 2> /dev/null
 convert "$PNG_SAVE" -crop 1304x984+12+4 "$PNG_CROP"
+if [ $? != 0 ]
+then
+	echo "Unable to crop PNG"
+	exit 2
+fi
+
 
 # convert to black
 convert "$PNG_CROP" -negate "$PBM_B_TEMP"
