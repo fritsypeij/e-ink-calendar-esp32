@@ -6,7 +6,7 @@ For Ubuntu:
 sudo apt install wget python3 python3-pip imagemagick netcat firefox language-pack-lt
 sudo pip3 install icalendar recurring_ical_events
 ```
-Note, Ubuntu may also aks you to run ` sudo snap install firefox`, check terminal output.
+Note, Ubuntu may also aks you to run `sudo snap install firefox`, check terminal output.
 
 For Alpine:
 
