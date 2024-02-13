@@ -30,7 +30,7 @@ EID_PORT="80"
 Add this line to your cron:
 
 ```
-0 0 * * * cd /path/to/git/e-ink-calendar-esp32/cron && ./pull_calendar.sh
+0 0 * * * cd /path/to/git/e-ink-calendar-esp32/cron && source .env && ./pull_calendar.sh
 ```
 
 # Docker
