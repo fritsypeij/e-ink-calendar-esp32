@@ -16,6 +16,7 @@ def append_event(idx, dt, ev):
 def date_idx(d):
 	return d.year*10000 + d.month*100 + d.day
 
+
 locale.setlocale(locale.LC_TIME, "lt_LT.utf8")
 #locale.setlocale(locale.LC_TIME, "ru_RU.UTF-8")
 mytz = pytz.timezone("Europe/Vilnius")
@@ -68,7 +69,7 @@ for event in events:
 ##print(month)
 
 # load template
-template_file = open("template.shtml", "r")
+template_file = open(sys.argv[2], "r")
 template = template_file.read()
 template = template.replace("${TODAY_DAY}",    today.strftime("%-d"))
 template = template.replace("${TODAY_WEEKDAY}",today.strftime("%A"))
@@ -152,7 +153,7 @@ while loop_day <= end_date:
 
 template = template.replace("${DAY_ROW}", dayrow)
 
-output_file = open(sys.argv[2], "w")
+output_file = open(sys.argv[3], "w")
 output_file.write(template)
 output_file.close()
 

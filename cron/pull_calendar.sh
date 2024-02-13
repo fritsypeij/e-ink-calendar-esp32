@@ -14,9 +14,8 @@ log_info ()
 # get script's dir
 SCRIPT=`realpath $0`
 DIR=`dirname $SCRIPT`
-source $DIR/.env
 
-# if .env does not override, use the script's dir
+# if env does not override, use the script's dir
 if [ -z "$BASEDIR" ]
 then
 	log_info "BASEDIR not defined, setting to $DIR"
@@ -25,7 +24,8 @@ fi
 
 # file locations
 ICAL_SAVE="$BASEDIR/ical.txt"
-HTML_DOC="$BASEDIR/render.html"
+HTML_TEMPLATE="$BASEDIR/template.shtml"
+HTML_RENDER="$BASEDIR/render.html"
 PNG_SAVE="$BASEDIR/ical-raw.png"
 PNG_CROP="$BASEDIR/ical.png"
 PBM_B_TEMP="$BASEDIR/ical.b.pbm"
@@ -50,7 +50,7 @@ then
 fi
 
 log_info "parse and save only requsted month and the next one"
-python3 process_month.py "$ICAL_SAVE" "$HTML_DOC"
+python3 "$BASEDIR/process_month.py" "$ICAL_SAVE" "$HTML_TEMPLATE" "$HTML_RENDER"
 if [ $? != 0 ]
 then
 	log_error "python code failed"
@@ -66,7 +66,7 @@ then
 fi
 
 log_info "run firefox to make screenshot only"
-firefox --headless --screenshot "$PNG_SAVE" "file://$HTML_DOC" 1> /dev/null 2> /dev/null
+firefox --headless --screenshot "$PNG_SAVE" "file://$HTML_RENDER" 1> /dev/null 2> /dev/null
 log_info "crop area that fits our screen"
 convert "$PNG_SAVE" -crop 1304x984+12+4 "$PNG_CROP"
 if [ $? != 0 ]
