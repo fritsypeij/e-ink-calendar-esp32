@@ -12,6 +12,8 @@ The board will connect to wifi, open a tcp socket port (default 80) and read byt
 
 Network paket format: HEADER (4 bytes) + PBM (80196 bytes)
 
-HEADER is one of ansi strings: EID0, EID1, EID2, EID3.
+HEADER is one of ansi strings: EID0 (black upper), EID1 (black bottom), EID2 (red uppper), EID3 (red bottom).
+
+PBM bytes is half of an image you want to draw.
 
 EID9 means clear screen.
