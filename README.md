@@ -10,6 +10,15 @@ The display requires a specific driver board which is only sold by Waveshare and
 
 It took 6 months for me to get all the needed parts. If you decide to assemble this project, I recommend you to get a module set which includes everything you need.
 
+# Quick start
+
+1. Get `Waveshare 12.48 inch module`: $185 [link](https://www.waveshare.com/12.48inch-e-paper-module-b.htm)
+2. Get `Waveshare ESP32 E-Paper driver`: $15 [link](https://www.waveshare.com/e-paper-esp32-driver-board.htm)
+3. Install Arduino, add `ESP32 board json`, open project and upload it.
+4. Generate `Google Calendar` magic link
+5. Edit `.env` file
+6. Run `pull_calendar.sh`
+
 # Host program
 
 Host program requires Ubuntu, bash, python3 or docker.
