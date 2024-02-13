@@ -17,7 +17,7 @@ DIR=`dirname $SCRIPT`
 source $DIR/.env
 
 # if .env does not override, use the script's dir
-if [ -z "$BASEDIR"]
+if [ -z "$BASEDIR" ]
 then
 	log_info "BASEDIR not defined, setting to $DIR"
 	BASEDIR=$DIR
