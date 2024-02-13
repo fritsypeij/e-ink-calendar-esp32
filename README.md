@@ -10,7 +10,7 @@ It took 6 months for me to get all the needed parts. If you decide to assemble t
 
 # Host program
 
-Host program requires Linux, bash, python3 or docker.
+Host program requires Ubuntu, bash, python3 or docker.
 
 See [cron/](cron/) dir for instructions.
 
