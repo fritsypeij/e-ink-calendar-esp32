@@ -6,6 +6,12 @@ Edit file `wifi_pass.h` with your real wifi SSID and password.
 
 Use Arduino IDE to flash the code. Select `ESP32 dev module` as your target board.
 
+# Run
+
+Plug the screen into a usb 5v power supply and let it boot.
+In about a minute the screen should clean itself and print the IP address.
+Use that address to configure the host cron script.
+
 # Protocol
 
 The board will connect to wifi, open a tcp socket port (default 80) and read bytes from socket upon a connection.
