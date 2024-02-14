@@ -10,6 +10,18 @@ The display requires a specific driver board which is only sold by Waveshare and
 
 It took 6 months for me to get all the needed parts. If you decide to assemble this project, I recommend you to get a module set which includes everything you need.
 
+After everything gets connected, the data flows as following:
+
+```mermaid
+graph TD;
+    A[Cron]-->|magic link|B[Google];
+    B-->|iCal|A
+    A-->|write|C[Generate PNG];
+    C-->|read|A
+    A-->|Send packets|D[Display];
+```
+At this point no authentication is implemented. ESP32 would accept any request. You should only run this solution in a trusted LAN.
+
 # Quick start
 
 1. Get `Waveshare 12.48 inch module`: $185 [link](https://www.waveshare.com/12.48inch-e-paper-module-b.htm)
