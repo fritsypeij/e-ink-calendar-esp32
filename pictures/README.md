@@ -23,6 +23,11 @@ Left: wrong 24 pin FPC, right: display's 30 pin FPC:
 
 ![e-ink calendar esp32](wrong-ribbon.jpg)
 
+
 Custom frame order:
 
 ![e-ink calendar esp32](custom-frame.jpg)
+
+Temporary wiring with ESP32 dev kit to see if the display actually works:
+
+![e-ink calendar esp32](temp-wiring.jpg)
