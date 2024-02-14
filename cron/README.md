@@ -30,6 +30,7 @@ EID_PORT="80"
 Add this line to your cron:
 
 ```
+SHELL=/bin/bash
 0 0 * * * cd /path/to/git/e-ink-calendar-esp32/cron && source .env && ./pull_calendar.sh
 ```
 
