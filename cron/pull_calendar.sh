@@ -27,7 +27,8 @@ ICAL_SAVE="$BASEDIR/ical.txt"
 HTML_TEMPLATE="$BASEDIR/template.shtml"
 HTML_RENDER="$BASEDIR/render.html"
 PNG_SAVE="$BASEDIR/ical-raw.png"
-PNG_CROP="$BASEDIR/ical.png"
+PNG_CROP="$BASEDIR/ical-crop.png"
+PNG_BRW="$BASEDIR/ical.png"
 PBM_B_TEMP="$BASEDIR/ical.b.pbm"
 PBM_R_TEMP="$BASEDIR/ical.r.pbm"
 #ICAL_SECRET_URL="https://calendar.google.com/calendar/ical/xxx%40group.calendar.google.com/private-xxx/basic.ics"
@@ -75,11 +76,14 @@ then
 	exit 3
 fi
 
+log_info "converting to black-red-white"
+python3 "$BASEDIR/convert-brw.py" "$PNG_CROP" "$PNG_BRW"
+
 log_info "extract black channel to $PBM_B_TEMP"
-convert "$PNG_CROP" -negate "$PBM_B_TEMP"
+convert "$PNG_BRW" -negate "$PBM_B_TEMP"
 
 log_info "extract red channel to $PBM_R_TEMP"
-convert "$PNG_CROP" -fill white +opaque red "$PBM_R_TEMP.png"
+convert "$PNG_BRW" -fill white +opaque red "$PBM_R_TEMP.png"
 convert "$PBM_R_TEMP.png" -negate "$PBM_R_TEMP"
 
 log_info "clear display"
