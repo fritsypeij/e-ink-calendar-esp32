@@ -51,7 +51,7 @@ then
 fi
 
 log_info "parse and save only requsted month and the next one"
-python3 "$BASEDIR/process_month.py" "$ICAL_SAVE" "$HTML_TEMPLATE" "$HTML_RENDER"
+python3 "$BASEDIR/process_month.py" "$ICAL_SAVE" "$HTML_TEMPLATE" "$HTML_RENDER" $1
 if [ $? != 0 ]
 then
 	log_error "python code failed"

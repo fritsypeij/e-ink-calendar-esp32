@@ -17,8 +17,8 @@ def date_idx(d):
 	return d.year*10000 + d.month*100 + d.day
 
 
-locale.setlocale(locale.LC_TIME, "lt_LT.utf8")
-#locale.setlocale(locale.LC_TIME, "ru_RU.UTF-8")
+if len(sys.argv) > 4:
+	locale.setlocale(locale.LC_TIME, sys.argv[4])
 mytz = pytz.timezone("Europe/Vilnius")
 
 input_file = open(sys.argv[1], "r")
