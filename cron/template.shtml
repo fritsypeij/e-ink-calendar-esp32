@@ -14,12 +14,11 @@
 			<tbody>
 			<tr>
 				<td style="height: 100%; width: 30%; text-align: center;">
-
+					<span style="font-size: 90px; color: ${COLOR}">
+					${TODAY_WEEKDAY}</span><br>
 					<span style="font-size: 250px; color: ${COLOR}">
 					${TODAY_DAY}
 					</span><br>
-					<span style="font-size: 90px; color: ${COLOR}">
-					${TODAY_WEEKDAY}</span><br>
 					<span style="font-size: 60px; color: black">
 					${TODAY_MONTH} ${TODAY_YEAR}</span>
 
