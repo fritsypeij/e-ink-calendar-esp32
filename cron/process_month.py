@@ -53,7 +53,7 @@ for event in events:
 
 	if event_date.tzinfo == None:
 		event_date = mytz.localize(event_date)
-	if event_date > start_date and event_date < end_date:
+	if event_date >= start_date and event_date <= end_date:
 		dayindex = int(event_date.strftime('%Y%m%d'))
 		summary = str(event.get('summary'))
 
