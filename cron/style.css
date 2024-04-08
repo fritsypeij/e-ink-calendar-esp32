@@ -27,6 +27,10 @@ table.root {
   width: 1304px;
 }
 
+.hide {
+  display: none;
+}
+
 table {
   border-collapse: collapse;
   height: 100%;
@@ -55,31 +59,35 @@ table {
 }
 
 .calendar-header-day {
-  font-size: 2em;
-}
-.calendar-header-date {
-  font-family: "Roboto Slab", serif;
   font-size: 5em;
   font-weight: 900;
-  margin-bottom: 0.1em;
 }
-.calendar-header-month-year {
-  font-size: 1.4em;
+.calendar-header-month {
+  font-size: 2em;
+  font-weight: 700;
+}
+
+.calendar-header-year {
+  color: rgba(0, 0, 0, 0.5);
+  font-size: 1.2em;
+  font-weight: 700;
+  margin-top: 0.2em;
 }
 
 .calendar-header-upcoming {
   width: 80%;
 }
 
-.calendar-table thead {
-  box-shadow: inset 0 -1px 0 0 rgba(0, 0, 0, 0.25);
+.calendar-table {
+  border-collapse: separate;
+  border-spacing: 0.5rem 0;
 }
 
 .calendar-table th {
   font-size: 1.2em;
   font-weight: 500;
-  padding: 0.5em;
-  text-align: center;
+  padding: 0.5em 1em;
+  text-align: left;
   vertical-align: top;
 }
 
@@ -88,12 +96,11 @@ table {
 }
 
 .week {
-  height: 240px;
+  height: min(33.334%, fit-content);
   width: 100%;
 }
 
 .day {
-  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.25);
   font-size: 1rem;
   max-width: 186px;
   padding: 0.5rem;
@@ -102,11 +109,19 @@ table {
   width: calc(100vw / 7);
 }
 
+.day::before {
+  border-top: 1px solid rgba(0, 0, 0, 0.25);
+  content: "";
+  height: 1rem;
+  inset: 0 0 auto;
+  position: absolute;
+}
+
 .event.first-day,
 .event.between-day,
 .event.last-day {
   align-items: center;
-  background-color: rgba(255, 200, 200);
+  background-color: rgba(255, 0, 0, 0.2);
   border: 1px solid rgba(255, 0, 0, 0.2);
   display: flex;
   font-size: 1em;
@@ -127,27 +142,32 @@ table {
   border-left: none;
   border-radius: 0;
   border-right: none;
-  margin: 0 -0.5rem 0.3rem;
+  margin: 0 -0.5rem 0.3rem -1rem;
 }
 
 .event.last-day {
   border-left: none;
   border-radius: 0 1em 1em 0;
-  margin: 0 0.3rem 0 -0.5rem;
+  margin: 0 0 0.3rem -1rem;
 }
 
 .event.multi-day.past {
+  background: rgba(255, 0, 0, 0.05);
   opacity: 1;
-  background: rgb(255, 230, 230);
 }
 
 .event.multi-day.yesterday {
-  background: linear-gradient(to right, rgba(255, 230, 230) 50%, rgba(255, 200, 200));
+  background: linear-gradient(to right, rgba(255, 0, 0, 0.05) 75%, rgba(255, 0, 0, 0.2));
 }
 
 .event.last-day:not(.monday) .summary,
 .event.between-day:not(.monday) .summary {
   display: none;
+}
+
+.event.multi-day.monday:not(.first-day) .summary::before {
+  content: "...";
+  margin-right: -0.2em;
 }
 
 .event.multi-day time {
@@ -162,18 +182,19 @@ td.weekend {
   align-items: center;
   border-radius: 50%;
   display: flex;
-  font-family: "Roboto Slab", serif;
+  /* font-family: "Roboto Slab", serif; */
   font-size: 1.2rem;
   font-weight: bold;
   height: 2.6rem;
   justify-content: center;
-  margin: 0 auto 0.5rem;
+  margin: 0 0 0.5rem;
   width: 2.6rem;
 }
 
 .weekend .date {
-  background: white;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  /* background: white;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); */
+  background: radial-gradient( at 50%, white 0%, transparent 66%);
 }
 
 .today .date {
@@ -214,6 +235,14 @@ td.weekend {
 .upcoming.full-day i {
   font-size: 1.4em;
   margin-right: -0.5em;
+}
+
+.upcoming .summary {
+  font-family: "Roboto", sans-serif;
+  font-size: 1.2em;
+  font-weight: 500;
+  line-height: 1;
+  overflow: initial !important;
 }
 
 .event {
@@ -265,8 +294,11 @@ time svg {
 }
 
 .event:not(.multi-day) .summary {
+  -webkit-box-orient: vertical;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
   max-width: 100%;
-  overflow-x: hidden;
+  overflow: hidden;
   text-overflow: ellipsis;
 }
 
@@ -280,11 +312,12 @@ time svg {
   font-size: 0.8em;
   font-weight: 300;
   left: 1304px;
-  padding: 0.5rem;
+  padding: 0.5rem 1rem;
   position: absolute;
   top: 984px;
   transform: translate(-100%, -100%);
   white-space: nowrap;
+  z-index: 1;
 }
 
 .updated span {

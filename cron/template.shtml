@@ -13,9 +13,9 @@
           <table class="calendar-header">
             <tr>
               <td class="calendar-header-today">
-                <div class="calendar-header-day">${TODAY_WEEKDAY}</div>
-                <div class="calendar-header-date">${TODAY_DAY}</div>
-                <div class="calendar-header-month-year">${TODAY_MONTH} ${TODAY_YEAR}</div>
+                <div class="calendar-header-day">${TODAY_DAY}</div>
+                <div class="calendar-header-month">${TODAY_MONTH}</div>
+                <div class="calendar-header-year hide">${TODAY_YEAR}</div>
               </td>
               <td class="calendar-header-upcoming">
                 <div class="upcoming-container">
