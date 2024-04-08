@@ -21,6 +21,9 @@ then
 	log_info "BASEDIR not defined, setting to $DIR"
 	BASEDIR=$DIR
 	TEMPDIR=$DIR/tmp
+
+	# Create the directory if it doesn't exist
+	mkdir -p $TEMPDIR
 fi
 
 # file locations
