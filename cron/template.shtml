@@ -1,61 +1,54 @@
-<table border="0" cellpadding="1" cellspacing="1" style="height:984px; width:1304px">
-<tbody>
-<tr>
-	<td>
-
-		<table border="0" cellpadding="1" cellspacing="1"
-			style="height: 100%;  width: 100%;">
-		<tbody>
-		<tr style="height: 50%;  width: 100%;">
-			<td>
-
-			<table border="0" cellpadding="1" cellspacing="1"
-				style="height: 100%;  width: 100%;">
-			<tbody>
-			<tr>
-				<td style="height: 100%; width: 30%; text-align: center;">
-					<span style="font-size: 90px; color: ${COLOR}">
-					${TODAY_WEEKDAY}</span><br>
-					<span style="font-size: 250px; color: ${COLOR}">
-					${TODAY_DAY}
-					</span><br>
-					<span style="font-size: 60px; color: black">
-					${TODAY_MONTH} ${TODAY_YEAR}</span>
-
-				</td>
-				<td style="height: 100%; width: 50%; text-align: center;">
-
-					<span style="font-size: 70px; color: ${COLOR}">
-					<strong>${TODAY_FULL_DAY_EVENTS}</strong>
-					${TODAY_EVENTS}
-					</span>
-
-				</td>
-			</tr>	
-			</tbody>
-			</table>
-
-			</td>
-		</tr>
-		<tr style="height: 50%; width: 100%;">
-			<td>
-			
-			<table border="1" cellpadding="1" cellspacing="1"
-				style="height: 100%; width: 100%; text-align: center;">
-			<tbody>
-			<tr style="height: 50%;">
-				${DAY_ROW}
-			</tr>
-			</tbody>
-			</table>
-			
-			</td>
-		</tr>
-		</tbody>
-		</table>
-
-	</td>
-</tr>
-</tbody>
-</table>
-
+<html>
+  <head>
+    <title>Calendar</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+  </head>
+  <body>
+    <div class="updated">
+      <span>Updated: ${UPDATED}</span>
+    </div>
+    <table class="root">
+      <tr class="top">
+        <td>
+          <table class="calendar-header">
+            <tr>
+              <td class="calendar-header-today">
+                <div class="calendar-header-day">${TODAY_WEEKDAY}</div>
+                <div class="calendar-header-date">${TODAY_DAY}</div>
+                <div class="calendar-header-month-year">${TODAY_MONTH} ${TODAY_YEAR}</div>
+              </td>
+              <td class="calendar-header-upcoming">
+                <div class="upcoming-container">
+                  <div class="upcoming full-day">${TODAY_FULL_DAY_EVENTS}</div>
+                  <div class="upcoming">${TODAY_EVENTS}</div>
+                </div>
+              </td>
+            </tr>	
+          </table>
+        </td>
+      </tr>
+      <tr class="bottom">
+        <td>
+          <table class="calendar-table">
+            <thead>
+              <tr>
+                <th class="day-name">${DAY1}</th>
+                <th class="day-name">${DAY2}</th>
+                <th class="day-name">${DAY3}</th>
+                <th class="day-name">${DAY4}</th>
+                <th class="day-name">${DAY5}</th>
+                <th class="day-name weekend">${DAY6}</th>
+                <th class="day-name weekend">${DAY7}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="week">
+${DAY_ROW}
+              </tr>
+            </tbody>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>

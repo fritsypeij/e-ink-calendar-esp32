@@ -5,7 +5,7 @@
 #define EIDH 984
 
 WiFiServer server(80);
-int Version = 1; // needed for EPD
+int Version = 2; // needed for EPD
 
 void blink_led()
 {
@@ -64,7 +64,6 @@ void paint(unsigned char *buf, int side)
       break;
     case 1:
       EPD_12in48B_SendBlack2(buf);
-      EPD_12in48B_TurnOnDisplay();
       break;
     case 2:
       EPD_12in48B_SendRed1(buf);

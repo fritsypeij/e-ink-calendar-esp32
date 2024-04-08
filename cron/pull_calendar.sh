@@ -20,20 +20,19 @@ if [ -z "$BASEDIR" ]
 then
 	log_info "BASEDIR not defined, setting to $DIR"
 	BASEDIR=$DIR
+	TEMPDIR=$DIR/tmp
 fi
 
 # file locations
-ICAL_SAVE="$BASEDIR/ical.txt"
-HTML_TEMPLATE="$BASEDIR/template.shtml"
-HTML_RENDER="$BASEDIR/render.html"
-PNG_SAVE="$BASEDIR/ical-raw.png"
-PNG_CROP="$BASEDIR/ical-crop.png"
-PNG_BRW="$BASEDIR/ical.png"
-PBM_B_TEMP="$BASEDIR/ical.b.pbm"
-PBM_R_TEMP="$BASEDIR/ical.r.pbm"
-#ICAL_SECRET_URL="https://calendar.google.com/calendar/ical/xxx%40group.calendar.google.com/private-xxx/basic.ics"
-#EID_IP="192.168.1.1"
-#EID_PORT="80"
+ICAL_SAVE="$TEMPDIR/ical.txt"
+HTML_TEMPLATE="$TEMPDIR/template.shtml"
+HTML_RENDER="$TEMPDIR/render.html"
+PNG_SAVE="$TEMPDIR/ical-raw.png"
+PNG_CROP="$TEMPDIR/ical-crop.png"
+PBM_TEMP="$TEMPDIR/ical.png"
+PBM_B_TEMP="$TEMPDIR/ical.b.pbm"
+PBM_R_TEMP="$TEMPDIR/ical.r.pbm"
+PALETTE="$TEMPDIR/palette.gif"
 
 # headers
 BCK_UP="EID0"
@@ -43,11 +42,21 @@ RED_DN="EID3"
 CLEAR="EID9"
 
 log_info "download calendar to a temp file"
-wget -q -O "$ICAL_SAVE" "$ICAL_SECRET_URL"
-if [ ! -s "$ICAL_SAVE" ]
-then
-	log_error "Unable to download the calendar"
-	exit 1
+> "$ICAL_SAVE"
+
+# Loop over the URLs
+for url in "${ICAL_SECRET_URLS[@]}"; do
+    # Download the calendar and append it to the file
+    wget -q -O - "$url" >> "$ICAL_SAVE"
+    if [ $? != 0 ]; then
+        echo "Unable to download the calendar from $url"
+        exit 1
+    fi
+done
+
+if [ ! -s "$ICAL_SAVE" ]; then
+    echo "No calendars were downloaded"
+    exit 1
 fi
 
 log_info "parse and save only requsted month and the next one"
@@ -69,7 +78,7 @@ fi
 log_info "run firefox to make screenshot only"
 firefox --headless --screenshot "$PNG_SAVE" "file://$HTML_RENDER" 1> /dev/null 2> /dev/null
 log_info "crop area that fits our screen"
-convert "$PNG_SAVE" -crop 1304x984+12+4 "$PNG_CROP"
+convert "$PNG_SAVE" -crop 1304x984+0+0 "$PNG_CROP"
 if [ $? != 0 ]
 then
 	log_error "Unable to crop PNG"
@@ -77,18 +86,17 @@ then
 fi
 
 log_info "converting to black-red-white"
-python3 "$BASEDIR/convert-brw.py" "$PNG_CROP" "$PNG_BRW"
+convert xc:black xc:white xc:red +append "$PALETTE"
+convert "$PNG_CROP" -dither FloydSteinberg -remap "$PALETTE" "$PBM_TEMP"
 
-log_info "extract black channel to $PBM_B_TEMP"
-convert "$PNG_BRW" -negate "$PBM_B_TEMP"
-
-log_info "extract red channel to $PBM_R_TEMP"
-convert "$PNG_BRW" -fill white +opaque red "$PBM_R_TEMP.png"
-convert "$PBM_R_TEMP.png" -negate "$PBM_R_TEMP"
+log_info "extract red and black colors to separate files"
+convert "$PBM_TEMP" -fill white -opaque red -negate "$PBM_B_TEMP"
+convert "$PBM_TEMP" -fill white -opaque black -negate "$PBM_R_TEMP"
 
 log_info "clear display"
 cat <(echo -n $CLEAR) | nc -w 1 $EID_IP $EID_PORT
-sleep 30
+
+sleep 60
 
 chunk=$((1304*984/8/2))
 log_info "sending black top"
