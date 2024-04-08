@@ -6,11 +6,11 @@ import locale
 import sys
 import re
 
-def append_event(idx, dt, ev, uid, cal_name):
+def append_event(index, time, summary, uid, cal_name, event_start, event_end):
   global month
-  if idx not in month:
-    month[idx] = list()
-  month[idx].append([dt, ev, uid, cal_name])
+  if index not in month:
+    month[index] = list()
+  month[index].append([time, summary, uid, cal_name, event_start, event_end])
 
 def date_idx(d):
   return d.year*10000 + d.month*100 + d.day
@@ -59,7 +59,7 @@ ical_events = []
 
 for calendar in calendars:
   events = Calendar.from_ical("BEGIN:VCALENDAR\n" + calendar)
-  # add the X-WR-CALNAME to all events
+  # add the calendar name (X-WR-CALNAME) to all events
   for event in events.walk():
     if event.name == "VEVENT":
       event.add('cal_name', events.get('x-wr-calname').lower())
@@ -67,8 +67,9 @@ for calendar in calendars:
 
 # today
 today = datetime.today()
-# today = datetime.today() + timedelta(days= -1) # for testing purposes
+# today = datetime.today()  # for testing purposes
 now = datetime.now(pytz.UTC)
+
 current_day   = today.day
 current_month = today.month
 current_year  = today.year
@@ -89,10 +90,38 @@ for cal in ical_events:
 
 month = dict()
 
-def process_event(event, recent_events, special_calendars, t_allday):
-  time, summary, uid, cal_name = event
+def process_event(event, recent_events, special_calendars, t_allday, calendar_date):
+  allday = ""
+  timeday = ""
 
-  recent_class = "recent" if uid in [e.get('uid') for e in recent_events] else ""
+  if calendar_date.tzinfo is None:
+    calendar_date = mytz.localize(calendar_date)
+
+  time, summary, uid, cal_name, start_date, end_date = event
+
+  multi_day = end_date - start_date > timedelta(days=1)
+
+  classes = "event"
+  classes += " " + cal_name
+  classes += " recent" if uid in [e.get('uid') for e in recent_events] else ""
+  classes += " all-day" if time is None else " timeday"
+
+  if (multi_day):
+    classes += " multi-day"
+    if calendar_date.weekday() == 0:
+      classes += " monday"
+    if today.date() - timedelta(days=1) == calendar_date.date():
+      classes += " yesterday"
+    if today.date() == calendar_date.date():
+      classes += " today"
+    if start_date == calendar_date.date():
+      classes += " first-day"
+    elif end_date - calendar_date.date() > timedelta(days=1):
+      classes += " between-day"
+    else:
+      classes += " last-day"
+  
+  classes += " past" if calendar_date.date() < now.date() else " future"
 
   labels = [cal['label'] for cal in special_calendars if cal['name'] == cal_name]
   label = labels[0] if labels else t_allday
@@ -101,13 +130,19 @@ def process_event(event, recent_events, special_calendars, t_allday):
     label = special_calendars[0]['label']
     summary = summary[2:]
 
+  event_html = f'''\
+    <div class="{classes}">
+      <time>{time if time else label}</time>
+      <span class="summary">
+        {summary}
+      </span>
+    </div>'''
+
   if time:
-    timeday = '<div class="event ' + recent_class + ' ' + cal_name + '"><time>' + time + '</time><span class="summary">' + summary + '</span></div>'
-    allday = ""
+    timeday = event_html
     add_count = 0
   else:
-    timeday = ""
-    allday = '<div class="event all-day ' + recent_class + ' ' + cal_name + '"><time>' + label + '</time><span class="summary">' + summary + '</span></div>'
+    allday = event_html
     add_count = 1
 
   return timeday, allday, add_count
@@ -117,11 +152,11 @@ for event in events:
   if event.name != "VEVENT":
     continue
 
-  cal_date = event.get('dtstart').dt
+  event_start = event.get('dtstart').dt
   event_end = event.get('dtend').dt
   cal_name = event.get('cal_name')
   uid = event.get('uid')
-  event_date = datetime.combine(cal_date, datetime.min.time())
+  event_date = datetime.combine(event_start, datetime.min.time())
   last_modified = event.get('last-modified')
 
   if last_modified is not None:
@@ -131,19 +166,19 @@ for event in events:
 
   if event_date.tzinfo is None:
     event_date = mytz.localize(event_date)
-  if event_date >= start_date and event_date <= end_date:
-    dayindex = int(event_date.strftime('%Y%m%d'))
-    summary = str(event.get('summary'))
 
-    # check for full day event
-    delta = event.get('dtend').dt - cal_date
+  if event_date >= start_date and event_date <= end_date:
+    index = int(event_date.strftime('%Y%m%d'))
+    summary = str(event.get('summary'))
+    delta = event.get('dtend').dt - event_start
+
     if delta.days >= 1:
       for i in range(0, delta.days):
-        append_event(dayindex + i, None, summary, uid, cal_name)
+        append_event(index + i, None, summary, uid, cal_name, event_start, event_end)
     else:
-      localtime = cal_date.astimezone(mytz).strftime("%H:%M")
+      start_time = event_start.astimezone(mytz).strftime("%H:%M")
       end_time = event_end.astimezone(mytz).strftime("%H:%M")
-      append_event(dayindex, localtime + ' - ' + end_time, summary, uid, cal_name)
+      append_event(index, start_time + ' - ' + end_time, summary, uid, cal_name, event_start, event_end)
 
 # Get all events that have been modified in the last three days
 three_days_ago = now - timedelta(hours=72)
@@ -175,10 +210,9 @@ classes="day"
 if today.weekday() >= 5:
   classes += " weekend"
 
-
 if dic_idx in month:
   for event in month[dic_idx]:
-    timeday_event, allday_event, _ = process_event(event, recent_events, special_calendars, t_allday)
+    timeday_event, allday_event, _ = process_event(event, recent_events, special_calendars, t_allday, today)
     timeday += timeday_event
     allday += allday_event
 else:
@@ -213,19 +247,19 @@ while loop_day <= end_date:
     # Sort the events by time. Events without a time (all-day events) will be put at the end.
     events.sort(key=lambda event: event[0] if event[0] else '23:59')
     for event in events:
-      timeday_event, allday_event, add_count = process_event(event, recent_events, special_calendars, t_allday)
+      timeday_event, allday_event, add_count = process_event(event, recent_events, special_calendars, t_allday, loop_day)
       timeday += timeday_event
       allday += allday_event
       count += add_count
 
   alldayHTML = ""
   if count > 0:
-    alldayHTML = '<div class="all-day-events">' + allday + '</div>'
+    alldayHTML = f'<div class="all-day-events">{allday}</div>'
 
-  if loop_day == start_date + timedelta(weeks=1):
-    dayrow+='\n</tr>\n<tr class="week">'
-  if loop_day == start_date + timedelta(weeks=2):
-    dayrow+='\n</tr>\n<tr class="week">'
+  for week in range(1, 3):
+    if loop_day == start_date + timedelta(weeks=week):
+      dayrow += '\n</tr>\n<tr class="week">'
+
   dayrow+=row.format(classes=classes, alldayHTML=alldayHTML, timeday=timeday, curday=loop_day.day)+"\n"
 
   loop_day += timedelta(days=1)
