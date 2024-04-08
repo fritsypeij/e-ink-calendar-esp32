@@ -1,10 +1,15 @@
 import recurring_ical_events
 from icalendar import Calendar
-from datetime import datetime, timedelta
+from datetime import datetime as dt
+from datetime import timedelta
+import datetime
 import pytz
 import locale
 import sys
 import re
+
+debugDays = 13
+debug = True
 
 def append_event(index, time, summary, uid, cal_name, event_start, event_end):
   global month
@@ -65,10 +70,12 @@ for calendar in calendars:
       event.add('cal_name', events.get('x-wr-calname').lower())
   ical_events.append(events)
 
-# today
-today = datetime.today()
-# today = datetime.today()  # for testing purposes
-now = datetime.now(pytz.UTC)
+today = dt.today()
+now = dt.now(pytz.UTC)
+
+if debug:
+  today = today + timedelta(days=debugDays)
+  now = now + timedelta(days=debugDays)
 
 current_day   = today.day
 current_month = today.month
@@ -121,7 +128,10 @@ def process_event(event, recent_events, special_calendars, t_allday, calendar_da
     else:
       classes += " last-day"
   
-  classes += " past" if calendar_date.date() < now.date() else " future"
+  if isinstance(end_date, datetime.datetime):
+    classes += " past" if end_date < now else " future"
+  else:
+    classes += " past" if calendar_date.date() < now.date() else " future"
 
   labels = [cal['label'] for cal in special_calendars if cal['name'] == cal_name]
   label = labels[0] if labels else t_allday
@@ -156,7 +166,7 @@ for event in events:
   event_end = event.get('dtend').dt
   cal_name = event.get('cal_name')
   uid = event.get('uid')
-  event_date = datetime.combine(event_start, datetime.min.time())
+  event_date = dt.combine(event_start, dt.min.time())
   last_modified = event.get('last-modified')
 
   if last_modified is not None:
@@ -171,10 +181,15 @@ for event in events:
     index = int(event_date.strftime('%Y%m%d'))
     summary = str(event.get('summary'))
     delta = event.get('dtend').dt - event_start
-
+    
     if delta.days >= 1:
-      for i in range(0, delta.days):
-        append_event(index + i, None, summary, uid, cal_name, event_start, event_end)
+      total_days = delta.days
+    
+      for i in range(total_days):
+        current_date = event_start + datetime.timedelta(days=i)
+        index = int(current_date.strftime('%Y%m%d'))
+        append_event(index, None, summary, uid, cal_name, event_start, event_end)
+
     else:
       start_time = event_start.astimezone(mytz).strftime("%H:%M")
       end_time = event_end.astimezone(mytz).strftime("%H:%M")
@@ -188,7 +203,6 @@ recent_events = [event for event in events if event.get('last-modified') and eve
 template_file = open(sys.argv[2], "r")
 template = template_file.read()
 template = template.replace("${TODAY_DAY}",    today.strftime("%-d"))
-template = template.replace("${TODAY_WEEKDAY}",today.strftime("%A"))
 template = template.replace("${TODAY_MONTH}",  today.strftime("%B"))
 template = template.replace("${TODAY_YEAR}",   today.strftime("%Y"))
 template = template.replace("${UPDATED}",      today.strftime("%d %b %H:%M"))
