@@ -25,7 +25,7 @@ fi
 
 # file locations
 ICAL_SAVE="$TEMPDIR/ical.txt"
-HTML_TEMPLATE="$TEMPDIR/template.shtml"
+HTML_TEMPLATE="$BASEDIR/template.shtml"
 HTML_RENDER="$TEMPDIR/render.html"
 PNG_SAVE="$TEMPDIR/ical-raw.png"
 PNG_CROP="$TEMPDIR/ical-crop.png"

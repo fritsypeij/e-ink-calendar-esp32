@@ -25,12 +25,12 @@ t_nothing_planned = confetti_icon + 'Er staat niks gepland voor vandaag!' # noth
 special_calendars = [
   { 
     'name': 'feestdagen',
-    # 'label': confetti_icon,
+  # 'label': confetti_icon,
     'label': 'feestdag',
   },
   { 
     'name': 'verjaardagen',
-    # 'label': birthday_icon,
+  # 'label': birthday_icon,
     'label': 'verjaardag',
   },
   {
@@ -67,7 +67,7 @@ for calendar in calendars:
 
 # today
 today = datetime.today()
-today = datetime.today() + timedelta(days= -1) # for testing purposes
+# today = datetime.today() + timedelta(days= -1) # for testing purposes
 now = datetime.now(pytz.UTC)
 current_day   = today.day
 current_month = today.month
