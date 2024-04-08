@@ -131,7 +131,7 @@ def process_event(event, recent_events, special_calendars, t_allday, calendar_da
   if isinstance(end_date, datetime.datetime):
     classes += " past" if end_date < now else " future"
   else:
-    classes += " past" if calendar_date.date() < now.date() else " future"
+    classes += " past" if end_date - timedelta(days=1) < today.date() else " future"
 
   labels = [cal['label'] for cal in special_calendars if cal['name'] == cal_name]
   label = labels[0] if labels else t_allday
