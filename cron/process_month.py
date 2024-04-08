@@ -8,8 +8,8 @@ import locale
 import sys
 import re
 
-debugDays = 13
-debug = True
+debugDays = 10
+debug = False
 
 def append_event(index, time, summary, uid, cal_name, event_start, event_end):
   global month
@@ -237,11 +237,11 @@ template = template.replace("${TODAY_EVENTS}", timeday)
 template = template.replace("${CLASSES}", classes)
 
 row = '''\
-  <td class="{classes}">
+  <div class="{classes}">
     <div class="date">{curday}</div>
     {alldayHTML}
     {timeday}
-  </td>'''
+  </div>'''
 # loop 21 days
 dayrow=""
 loop_day = start_date
@@ -269,10 +269,6 @@ while loop_day <= end_date:
   alldayHTML = ""
   if count > 0:
     alldayHTML = f'<div class="all-day-events">{allday}</div>'
-
-  for week in range(1, 3):
-    if loop_day == start_date + timedelta(weeks=week):
-      dayrow += '\n</tr>\n<tr class="week">'
 
   dayrow+=row.format(classes=classes, alldayHTML=alldayHTML, timeday=timeday, curday=loop_day.day)+"\n"
 

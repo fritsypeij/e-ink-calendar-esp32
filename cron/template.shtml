@@ -13,9 +13,11 @@
           <table class="calendar-header">
             <tr>
               <td class="calendar-header-today">
-                <div class="calendar-header-day">${TODAY_DAY}</div>
-                <div class="calendar-header-month">${TODAY_MONTH}</div>
-                <div class="calendar-header-year hide">${TODAY_YEAR}</div>
+                <div class="badge">
+                  <div class="badge-day">${TODAY_DAY}</div>
+                  <div class="badge-month">${TODAY_MONTH}</div>
+                  <div class="badge-year hide">${TODAY_YEAR}</div>
+                </div>
               </td>
               <td class="calendar-header-upcoming">
                 <div class="upcoming-container">
@@ -29,24 +31,16 @@
       </tr>
       <tr class="bottom">
         <td>
-          <table class="calendar-table">
-            <thead>
-              <tr>
-                <th class="day-name">${DAY1}</th>
-                <th class="day-name">${DAY2}</th>
-                <th class="day-name">${DAY3}</th>
-                <th class="day-name">${DAY4}</th>
-                <th class="day-name">${DAY5}</th>
-                <th class="day-name weekend">${DAY6}</th>
-                <th class="day-name weekend">${DAY7}</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr class="week">
+          <div class="calendar-table grid">
+            <div class="day-name">${DAY1}</div>
+            <div class="day-name">${DAY2}</div>
+            <div class="day-name">${DAY3}</div>
+            <div class="day-name">${DAY4}</div>
+            <div class="day-name">${DAY5}</div>
+            <div class="day-name weekend">${DAY6}</div>
+            <div class="day-name weekend">${DAY7}</div>
 ${DAY_ROW}
-              </tr>
-            </tbody>
-          </table>
+          </div>
         </td>
       </tr>
     </table>

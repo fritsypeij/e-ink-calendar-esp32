@@ -16,6 +16,7 @@ body * {
 
 body {
   font-size: 18px;
+  overflow: hidden;
 }
 
 html,
@@ -44,6 +45,7 @@ table {
 
 .bottom {
   height: 75%;
+  position: relative;
   width: 100%;
 }
 
@@ -53,21 +55,30 @@ table {
 }
 
 .calendar-header-today {
+  font-size: 2.5em;
   line-height: 1;
   text-align: center;
   width: 20%;
 }
 
-.calendar-header-day {
-  font-size: 5em;
-  font-weight: 900;
-}
-.calendar-header-month {
-  font-size: 2em;
-  font-weight: 700;
+.badge {
+  border: 3px solid rgba(0, 0, 0, 0.3);
+  border-radius: 0.5em;
+  margin: 0 auto;
+  padding: 0.375em 0.75em;
+  width: fit-content;
 }
 
-.calendar-header-year {
+.badge-day {
+  font-size: 2.5em;
+  font-weight: 500;
+}
+.badge-month {
+  font-size: 1em;
+  font-weight: 400;
+}
+
+.badge-year {
   color: rgba(0, 0, 0, 0.5);
   font-size: 1.2em;
   font-weight: 700;
@@ -83,15 +94,16 @@ table {
   border-spacing: 0.5rem 0;
 }
 
-.calendar-table th {
+.day-name {
+  align-items: center;
+  background: none !important;
+  display: flex;
   font-size: 1.2em;
   font-weight: 500;
   padding: 0.5em 1em;
-  text-align: left;
-  vertical-align: top;
 }
 
-.calendar-table th .today {
+.day-name .today {
   color: red;
 }
 
@@ -101,28 +113,30 @@ table {
 }
 
 .day {
+  border-top: 2px solid rgba(0, 0, 0, 0.25);
   font-size: 1rem;
-  max-width: 186px;
-  padding: 0.5rem;
+  padding: 0.5rem 0.5rem 1rem;
   position: relative;
   vertical-align: top;
-  width: calc(100vw / 7);
 }
 
-.day::before {
-  border-top: 1px solid rgba(0, 0, 0, 0.25);
-  content: "";
-  height: 1rem;
-  inset: 0 0 auto;
-  position: absolute;
+.all-day-events:not(:last-child) {
+  margin-bottom: 0.5rem;
 }
 
-.event.first-day,
-.event.between-day,
-.event.last-day {
+.event {
+  font-size: 1.1em;
+  margin-bottom: 0.5em;
+}
+
+.event:last-child {
+  margin-bottom: 0;
+}
+
+.day .event.multi-day {
   align-items: center;
   background-color: rgba(255, 0, 0, 0.2);
-  border: 1px solid rgba(255, 0, 0, 0.2);
+  border: 1px solid rgba(255, 0, 0, 0.35);
   display: flex;
   font-size: 1em;
   height: 100%;
@@ -132,57 +146,93 @@ table {
   padding: 0 0.5rem;
 }
 
-.event.first-day {
+.day .event.multi-day + .event:not(.multi-day) {
+  margin-top: 0.6rem;
+}
+
+.day .event.first-day {
   border-radius: 1em 0 0 1rem;
   border-right: none;
   margin: 0 -0.5rem 0.3rem 0;
 }
 
-.event.between-day {
+.day .event.between-day {
   border-left: none;
   border-radius: 0;
   border-right: none;
   margin: 0 -0.5rem 0.3rem -1rem;
 }
 
-.event.last-day {
+.day .event.last-day {
   border-left: none;
   border-radius: 0 1em 1em 0;
   margin: 0 0 0.3rem -1rem;
 }
 
-.event.multi-day.past {
+.day .event.multi-day.past {
   background: rgba(255, 0, 0, 0.05);
   opacity: 1;
 }
 
-.event.multi-day.yesterday {
+.day .event.multi-day.yesterday {
   background: linear-gradient(to right, rgba(255, 0, 0, 0.05) 75%, rgba(255, 0, 0, 0.2));
 }
 
-.event.last-day:not(.monday) .summary,
-.event.between-day:not(.monday) .summary {
+.day .event.last-day:not(.monday) .summary,
+.day .event.between-day:not(.monday) .summary {
   display: none;
 }
 
-.event.multi-day.monday:not(.first-day) .summary::before {
+.day .event.multi-day.monday:not(.first-day) .summary::before {
   content: "...";
   margin-right: -0.2em;
+}
+
+.event:not(.multi-day) .summary {
+  -webkit-box-orient: vertical;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.event.multi-day .summary {
+  white-space: nowrap;
+  z-index: 1;
 }
 
 .event.multi-day time {
   display: none;
 }
 
-td.weekend {
+.upcoming .multi-day time {
+  display: inline-flex;
+}
+
+.weekend {
   background: rgba(0, 0, 0, 0.05)
+}
+
+.grid {
+  display: grid;
+  gap: 0 0.5rem;
+  grid-template-columns: repeat(7, 1fr);
+  grid-template-rows: 2rem repeat(3, 1fr);
+  inset: 0;
+  padding: 0 0.5rem;
+  position: absolute;
+}
+
+.row {
+  min-height: 0;
+  overflow: auto;
 }
 
 .date {
   align-items: center;
   border-radius: 50%;
   display: flex;
-  /* font-family: "Roboto Slab", serif; */
   font-size: 1.2rem;
   font-weight: bold;
   height: 2.6rem;
@@ -192,8 +242,6 @@ td.weekend {
 }
 
 .weekend .date {
-  /* background: white;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); */
   background: radial-gradient( at 50%, white 0%, transparent 66%);
 }
 
@@ -220,7 +268,7 @@ td.weekend {
 
 .upcoming:not(.full-day) time {
   position: relative;
-  top: 0.1em;
+  top: 0.2em;
 }
 
 .upcoming.full-day time {
@@ -245,11 +293,6 @@ td.weekend {
   overflow: initial !important;
 }
 
-.event {
-  font-size: 1.1em;
-  margin-bottom: 1em;
-}
-
 time {
   align-items: center;
   display: inline-flex;
@@ -261,7 +304,15 @@ time {
 }
 
 .past {
+  opacity: 0.7;
+}
+
+.upcoming .past > * {
   opacity: 0.6;
+}
+
+.upcoming .past .summary {
+  text-decoration: line-through;
 }
 
 time svg {
@@ -291,20 +342,6 @@ time svg {
   font-family: "Roboto Condensed", sans-serif;
   font-weight: 700;
   line-height: 1.2;
-}
-
-.event:not(.multi-day) .summary {
-  -webkit-box-orient: vertical;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  max-width: 100%;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.event.multi-day .summary {
-  white-space: nowrap;
-  z-index: 1;
 }
 
 .updated {
