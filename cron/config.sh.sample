@@ -1,0 +1,13 @@
+#!/bin/bash -e
+
+ICAL_SECRET_URLS=(
+  "https://p##-caldav.icloud.com/published/#/..."
+  "https://calendar.google.com/calendar/ical/.../basic.ics"
+)
+EID_IP="192.168.1.1"
+EID_PORT="80"
+
+# fill this with the correct values and rename the file to `config.sh`
+# you can add multiple URLs to the ICAL_SECRET_URLS array
+# be sure to replace webcal:// with https:// if you are using iCloud
+# to be sure the device ip stays the same, set it as a static ip in your router

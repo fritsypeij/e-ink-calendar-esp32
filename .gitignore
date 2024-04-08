@@ -1,5 +1,2 @@
-cron/tmp/palette.gif
-cron/tmp/ical-crop.png
-cron/tmp/ical.b.pbm
-cron/tmp/ical.r.pbm
-esp32/waveshare-esp32/wifi_pass.h
+cron/tmp/
+cron/config.sh

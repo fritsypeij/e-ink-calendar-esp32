@@ -36,6 +36,9 @@ PBM_TEMP="$TEMPDIR/ical.png"
 PBM_B_TEMP="$TEMPDIR/ical.b.pbm"
 PBM_R_TEMP="$TEMPDIR/ical.r.pbm"
 PALETTE="$TEMPDIR/palette.gif"
+CONFIG="$BASEDIR/config.sh"
+
+source $CONFIG
 
 # headers
 BCK_UP="EID0"
