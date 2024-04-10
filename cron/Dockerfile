@@ -1,21 +1,32 @@
-FROM alpine
+FROM alpine:latest
 
-RUN apk update
-RUN apk add wget python3 bash netcat-openbsd py3-pip imagemagick firefox
-RUN pip3 install icalendar recurring_ical_events --break-system-packages
+ENV BASEDIR=/app
+ENV TEMPDIR=/app/tmp
 
-COPY process_month.py /app/
-COPY pull_calendar.sh /app/
-COPY template.shtml   /app/
+RUN mkdir -p $BASEDIR
+RUN mkdir -p $TEMPDIR
 
-ARG BASEDIR=/app
-ARG ICAL_SECRET_URL="https://calendar.google.com/calendar/ical/xxx%40group.calendar.google.com/private-xxx/basic.ics"
-ARG EID_IP="192.168.1.1"
-ARG EID_PORT="80"
-ENV BASEDIR=$BASEDIR
-ENV ICAL_SECRET_URL=$ICAL_SECRET_URL
-ENV EID_IP=$EID_IP
-ENV EID_PORT=$EID_PORT
+COPY process_month.py $BASEDIR
+COPY pull_calendar.sh $BASEDIR
+COPY template.shtml   $BASEDIR
+COPY style.css        $BASEDIR
+COPY config.sh        $BASEDIR
 
-ENTRYPOINT /app/pull_calendar.sh
+RUN apk update && \
+    apk add wget python3 bash netcat-openbsd py3-pip imagemagick firefox && \
+    pip3 install icalendar recurring_ical_events --break-system-packages
 
+RUN echo -e "#!/bin/bash\n\
+echo 'Hello from within the Docker container'\n\
+echo 'Starting cron daemon'\n\
+crond -f -L /dev/stdout\n\
+echo 'Cron daemon started'" > $BASEDIR/entrypoint.sh
+
+RUN chmod +x $BASEDIR/pull_calendar.sh && \
+    chmod +x $BASEDIR/entrypoint.sh
+
+RUN > /etc/crontabs/root && \
+    echo '0 * * * * /bin/bash /app/pull_calendar.sh' >> /etc/crontabs/root && \
+    echo '@reboot   /bin/bash /app/pull_calendar.sh' >> /etc/crontabs/root
+
+CMD ["/bin/bash", "/app/entrypoint.sh"]
